@@ -1,0 +1,94 @@
+# Ignore Visual Studio temporary files, build results, and
+# some sensitive project files
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## User-specific files (Mono Auto Generated)
+mono_crash.*
+
+## User-specific files (Visual Studio Code)
+.vscode/
+
+## Windows image file caches
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+## Folder config file
+Desktop.ini
+$RECYCLE.BIN/
+
+## Recycle Bin used on file shares
+*.lnk
+
+## Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+## Windows shortcuts
+*.lnk
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build directories
+bin/
+obj/
+
+# Ignore ASP.NET temporary files
+**/App_Data/Temp/
+
+# Ignore Visual Studio 2019/2022 directories
+.vs/
+.vscode/
+
+# Ignore Resharper files
+*.DotSettings.user
+_ReSharper*/
+
+# Ignore JetBrains Rider files
+.idea/
+
+# Ignore Rider projects config directory
+.idea
+
+# Ignore sensitive configuration files
+appsettings.json
+appsettings.Development.json
+
+# Ignore publish output
+PublishOutput/
+
+# Ignore database files
+*.mdf
+*.ldf
+
+# Ignore log files
+*.log
+
+# Ignore package directories
+packages/
+*.nupkg
+*.snupkg
+
+# Ignore Bower components
+bower_components/
+
+# Ignore WebAssembly and Blazor artifacts
+**/_framework/
+wwwroot/
+
+# Ignore .NET build directories
+project.lock.json
+project.fragment.lock.json
+artifacts/
+project.nuget.cache
+*.nupkg.metadata
