@@ -1,0 +1,199 @@
+@model InvoiceViewModel
+@{
+    ViewData["Title"] = "Invoice - " + Model.InvoiceNumber;
+}
+<section>
+    <div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <a href="@Url.Action("Index", "Invoice")" class="text-blue-500 hover:text-blue-700">
+            <i class="fas fa-arrow-left mr-1"></i> Back to Invoices
+        </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+            <div class="flex flex-wrap justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Invoice @Model.InvoiceNumber</h1>
+                    <p class="text-gray-600">@Model.Description</p>
+                </div>
+                <div class="flex space-x-2 mt-4 sm:mt-0">
+                    <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full @Model.StatusColor">
+                        @Model.StatusDisplay
+                    </span>
+                    @if (Model.IsRecurring)
+                    {
+                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                            Recurring
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900 mb-4">Invoice Information</h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Client</span>
+                            <span class="font-medium">@Model.ClientId</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Issue Date:</span>
+                            <span class="font-medium">@Html.DisplayFor(model => model.IssueDate)</span>
+                        </div>
+                        @{if(Model.DueDate != null){
+                            <div class="flex justify-between">
+                            <span class="text-gray-600">Due Date:</span>
+                            <span class="font-medium @(Model.IsOverDue ? "text-red-600" : "")">
+                                @Html.DisplayFor(model => model.DueDate)
+                                @if (Model.IsOverDue)
+                                {
+                                    <span class="ml-2 text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded">Overdue</span>
+                                }
+                            </span>
+                        </div>
+                        }}
+                        @if (Model.IsScheduled != false)
+                        {
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Scheduled Send Date:</span>
+                                <span class="font-medium">@Html.DisplayFor(model => model.ScheduledSendDate)</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900 mb-4">Payment Details</h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Subtotal (excl. GST):</span>
+                            <span class="font-medium">@Html.DisplayFor(model => model.TotalExcGST)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">GST (10%):</span>
+                            <span class="font-medium">@((Model.TotalIncGST - Model.TotalExcGST).ToString("C"))</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold">
+                            <span>Total (incl. GST):</span>
+                            <span>@Html.DisplayFor(model => model.TotalIncGST)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoice Items -->
+            <div class="mt-8">
+                <h2 class="text-lg font-medium text-gray-900 mb-4">Invoice Items</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Description
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Price
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Quantity
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr class="@(item.Cancelled ? "bg-red-50" : "")">
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">@item.Description</div>
+                                        @if (item.WorkDays.Count > 0)
+                                        {
+                                            <div class="text-xs text-gray-500">Work days: @item.WorkDaysFormatted</div>
+                                        }
+                                        @if (item.IsRecurring)
+                                        {
+                                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Recurring</span>
+                                        }
+                                        @if (item.IsMiscellaneous)
+                                        {
+                                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded ml-1">Misc</span>
+                                        }
+                                    </td>
+                                    <td class="px-6 py-4 text-right text-sm text-gray-900">
+                                        @Html.DisplayFor(modelItem => item.ItemPrice)
+                                    </td>
+                                    <td class="px-6 py-4 text-right text-sm text-gray-900">
+                                        @item.Quantity
+                                    </td>
+                                    <td class="px-6 py-4 text-right text-sm font-medium text-gray-900">
+                                        @Html.DisplayFor(modelItem => item.ItemTotal)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-gray-50">
+                                <td colspan="3" class="px-6 py-3 text-right text-sm font-medium text-gray-500">Subtotal (excl. GST)</td>
+                                <td class="px-6 py-3 text-right text-sm font-medium text-gray-900">@Html.DisplayFor(model => model.TotalExcGST)</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td colspan="3" class="px-6 py-3 text-right text-sm font-medium text-gray-500">GST (10%)</td>
+                                <td class="px-6 py-3 text-right text-sm font-medium text-gray-900">@((Model.TotalIncGST - Model.TotalExcGST).ToString("C"))</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td colspan="3" class="px-6 py-3 text-right text-sm font-bold text-gray-900">Total (incl. GST)</td>
+                                <td class="px-6 py-3 text-right text-sm font-bold text-gray-900">@Html.DisplayFor(model => model.TotalIncGST)</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Email Description -->
+            @if (!string.IsNullOrEmpty(Model.EmailDescription))
+            {
+                <div class="mt-8 p-4 bg-gray-50 rounded border border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900 mb-2">Email Description</h2>
+                    <p class="text-gray-700">@Model.EmailDescription</p>
+                </div>
+            }
+            
+            <!-- Action Buttons -->
+            <div class="mt-8 flex flex-wrap gap-3">
+                <a href="@Url.Action("Edit", "Invoice", new { id = Model.Id })" 
+                   class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
+                    Edit Invoice
+                </a>
+                @if (!Model.Sent)
+                {
+                    <a href="@Url.Action("Send", "Invoice", new { id = Model.Id })" 
+                       class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700">
+                        Send Invoice
+                    </a>
+                }
+                @if (!Model.IsPaid)
+                {
+                    <a href="@Url.Action("MarkAsPaid", "Invoice", new { id = Model.Id })" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
+                        Mark as Paid
+                    </a>
+                }
+                <a href="@Url.Action("Print", "Invoice", new { id = Model.Id })" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300">
+                    Print Invoice
+                </a>
+                <a href="@Url.Action("Download", "Invoice", new { id = Model.Id })" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300">
+                    Download PDF
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</section>

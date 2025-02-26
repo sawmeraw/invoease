@@ -1,10 +1,10 @@
 
 public class Client
 {
-    int Id { get; set; }
-    string Name { get; set; }
-    string AdminEmail { get; set; }
-    string PhoneNumber { get; set; }
-    string ContactPersonName { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string AdminEmail { get; set; }
+    public string PhoneNumber { get; set; }
+    public string ContactPersonName { get; set; }
 
 }
