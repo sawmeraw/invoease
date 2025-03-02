@@ -166,10 +166,13 @@
             
             <!-- Action Buttons -->
             <div class="mt-8 flex flex-wrap gap-3">
-                <a href="@Url.Action("Edit", "Invoice", new { id = Model.Id })" 
+                @if(!Model.Sent){
+<a href="@Url.Action("Edit", "Invoice", new { id = Model.Id })" 
                    class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
                     Edit Invoice
                 </a>
+                }
+                
                 @if (!Model.Sent)
                 {
                     <a href="@Url.Action("Send", "Invoice", new { id = Model.Id })" 

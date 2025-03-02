@@ -7,12 +7,22 @@ namespace invoease.Controllers
     public class InvoiceController : Controller
     {
         private readonly IMapper _mapper;
+
+        private static List<Client> _clients = new List<Client>(){
+            new Client{
+                Id = 1,
+                Name = "RunDNA",
+                AdminEmail = "accounts@rundna.com.au",
+                ContactPersonName = "Adele",
+                PhoneNumber = "0486489789"
+            }
+        };
         private static List<Invoice> _invoices = new List<Invoice>()
 {
     new Invoice
     {
         Id = 1,
-        ClientId = 101,
+        ClientId = 1,
         UserId = 501,
         InvoiceNumber = "INV-0001",
         Description = "Web Development Services",
@@ -60,7 +70,7 @@ namespace invoease.Controllers
     new Invoice
     {
         Id = 2,
-        ClientId = 102,
+        ClientId = 1,
         UserId = 502,
         InvoiceNumber = "INV-0002",
         Description = "Consulting Services",
@@ -95,7 +105,7 @@ namespace invoease.Controllers
     new Invoice
     {
         Id = 3,
-        ClientId = 103,
+        ClientId = 1,
         UserId = 503,
         InvoiceNumber = "INV-0003",
         Description = "Software License",
@@ -136,6 +146,16 @@ namespace invoease.Controllers
 
         public ActionResult Index()
         {
+            var queryResult = _invoices.Where(i => i.Id == 1 && i.ClientId == 1).ToList();
+            if (queryResult.Any())
+            {
+                var invList = _mapper.Map<List<InvoiceList>>(queryResult);
+                var viewModel = new InvoiceListViewModel
+                {
+                    invoices = invList
+                };
+                return View(viewModel);
+            }
             return View();
         }
         public ActionResult Details(int id)
