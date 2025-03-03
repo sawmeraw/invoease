@@ -10,12 +10,10 @@ public class InvoiceItem
     public decimal ItemTotal { get; set; }
     public bool? IsRecurring { get; set; }
     public List<DayOfWeek> WorkDays { get; set; } = new List<DayOfWeek>();
-    public DateTime CreatedDate { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public InvoiceItem()
-    {
-        CreatedDate = DateTime.Now;
-    }
+    //Navigation
+    public Invoice Invoice { get; set; }
 
 }
 
