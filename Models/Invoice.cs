@@ -17,6 +17,7 @@ public class Invoice
     public bool IsPaid { get; set; } = false;
     public bool IsRecurring { get; set; } = false;
     public DateTime CreatedAt { get; set; }
+    public bool IsDeleted { get; set; } = false;
 
     //Navigation
     public ICollection<InvoiceItem> Items { get; set; } = new List<InvoiceItem>();

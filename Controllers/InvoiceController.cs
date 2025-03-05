@@ -7,13 +7,10 @@ namespace invoease.Controllers
     public class InvoiceController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly InvoeaseDbContext _context;
-
 
         public InvoiceController(IMapper mapper, InvoeaseDbContext context)
         {
             _mapper = mapper;
-            _context = context;
         }
 
 

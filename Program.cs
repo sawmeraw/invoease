@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<InvoeaseDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
-
+builder.AddRepositories();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
