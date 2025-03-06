@@ -6,7 +6,7 @@ namespace Services
         Task<InvoiceDTO?> GetById(int id);
         Task Update(InvoiceDTO invoice);
         Task Delete(int id);
-        Task<Invoice?> Create(InvoiceDTO invoice);
+        Task<InvoiceDTO> Create(InvoiceDTO invoice);
 
     }
 }

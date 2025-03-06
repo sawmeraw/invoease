@@ -1,6 +1,6 @@
 public class InvoiceDTO
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
     public int ClientId { get; set; }
     public int UserId { get; set; }
     public string InvoiceNumber { get; set; }

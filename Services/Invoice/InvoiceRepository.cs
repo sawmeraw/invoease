@@ -9,13 +9,14 @@ class InvoiceRespository : IInvoiceRepository
     private readonly IMapper _mapper;
     private readonly ILogger<InvoiceRespository> _logger;
 
-    public InvoiceRespository(InvoeaseDbContext context, IMapper mapper)
+    public InvoiceRespository(InvoeaseDbContext context, IMapper mapper, ILogger<InvoiceRespository> logger)
     {
         _mapper = mapper;
         _context = context;
+        _logger = logger;
     }
 
-    public async Task<Invoice?> Create(InvoiceDTO invoiceDTO)
+    public async Task<InvoiceDTO> Create(InvoiceDTO invoiceDTO)
     {
         try
         {
@@ -46,7 +47,8 @@ class InvoiceRespository : IInvoiceRepository
             }
             await _context.Invoices.AddAsync(newInvoice);
             await _context.SaveChangesAsync();
-            return newInvoice;
+            var outgoingDTO = _mapper.Map<InvoiceDTO>(newInvoice);
+            return outgoingDTO;
         }
         catch (Exception ex)
         {

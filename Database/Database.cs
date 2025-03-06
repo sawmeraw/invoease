@@ -21,6 +21,11 @@ public class InvoeaseDbContext : DbContext
         modelBuilder.Entity<Invoice>().HasKey(i => i.Id);
         modelBuilder.Entity<InvoiceItem>().HasKey(ii => ii.Id);
 
+        modelBuilder.Entity<Invoice>().Property(i => i.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<User>().Property(u => u.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<Client>().Property(c => c.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<InvoiceItem>().Property(ii => ii.Id).ValueGeneratedOnAdd();
+
         modelBuilder.Entity<Invoice>().Property(i => i.TotalExcGST).HasColumnType("decimal(18,4)");
         modelBuilder.Entity<Invoice>().Property(i => i.TotalIncGST).HasColumnType("decimal(18,4)");
         modelBuilder.Entity<InvoiceItem>().Property(i => i.ItemTotal).HasColumnType("decimal(18,4)");
